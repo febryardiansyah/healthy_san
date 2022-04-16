@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_san/ui/forum/forum_screen.dart';
 import 'package:healthy_san/ui/home/home_screen.dart';
+import 'package:healthy_san/ui/profile/profile_screen.dart';
 import 'package:healthy_san/utils/base_color.dart';
 
 class MyBottomNav extends StatefulWidget {
@@ -13,7 +14,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
   List<Widget> children = [
     HomeScreen(),
     ForumScreen(),
-    HomeScreen(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
