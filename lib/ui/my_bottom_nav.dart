@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_san/ui/forum/forum_screen.dart';
 import 'package:healthy_san/ui/home/home_screen.dart';
 import 'package:healthy_san/utils/base_color.dart';
 
@@ -11,7 +12,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
   int currentIndex = 0;
   List<Widget> children = [
     HomeScreen(),
-    HomeScreen(),
+    ForumScreen(),
     HomeScreen(),
   ];
   @override

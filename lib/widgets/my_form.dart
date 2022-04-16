@@ -9,9 +9,20 @@ class MyForm extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final bool secureText;
+  final TextStyle? hintStyle;
+  final double borderRadius;
 
-  const MyForm({Key? key, this.hintText, this.controller, this.keyboardType,this.prefixIcon,this.suffixIcon,this.secureText = false})
-      : super(key: key);
+  const MyForm({
+    Key? key,
+    this.hintText,
+    this.controller,
+    this.keyboardType,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.secureText = false,
+    this.hintStyle,
+    this.borderRadius = 16,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +36,9 @@ class MyForm extends StatelessWidget {
         prefixIcon: prefixIcon,
         fillColor: BaseColor.lightGreen,
         hintText: hintText,
+        hintStyle: hintStyle,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide.none,
         ),
       ),

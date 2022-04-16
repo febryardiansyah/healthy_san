@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 24,),
                 ElevatedButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, rHome);
+                    Navigator.pushNamedAndRemoveUntil(context, rHome,(route) => false,);
                   },
                   child: Text('Masuk'),
                   style: ElevatedButton.styleFrom(
