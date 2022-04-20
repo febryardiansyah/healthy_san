@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthy_san/bloc/login/login_cubit.dart';
 import 'package:healthy_san/utils/base_color.dart';
+import 'package:healthy_san/utils/my_snackbar.dart';
 import 'package:healthy_san/utils/routes.dart';
 import 'package:healthy_san/widgets/my_form.dart';
 
@@ -9,11 +12,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final emailEdc = TextEditingController();
+  final passEdc = TextEditingController();
+  bool passInvisible = true;
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
+        body: BlocListener<LoginCubit, LoginState>(
+          listener: (context, state) {
+            if (state is LoginLoading) {
+              loadingSnackBar(context);
+            }
+            if (state is LoginFailure) {
+              failureSnackBar(context, state.msg);
+            }
+            if (state is LoginSuccess) {
+              successSnackBar(context, state.msg);
+            }
+          },
+          child: Padding(
           padding: EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
@@ -44,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 MyForm(
                   keyboardType: TextInputType.emailAddress,
                   hintText: 'mail@mail.com',
+                  controller: emailEdc,
                 ),
                 SizedBox(height: 12,),
                 Text('Kata Sandi'),
@@ -51,16 +71,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 MyForm(
                   keyboardType: TextInputType.emailAddress,
                   hintText: 'kata sandi',
-                  secureText: true,
+                  controller: passEdc,
+                  secureText: passInvisible,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.remove_red_eye_outlined),
-                    onPressed: (){},
+                    onPressed: (){
+                      setState(() {
+                        passInvisible = !passInvisible;
+                      });
+                    },
                   ),
                 ),
                 SizedBox(height: 24,),
                 ElevatedButton(
                   onPressed: (){
-                    Navigator.pushNamedAndRemoveUntil(context, rHome,(route) => false,);
+                    context.read<LoginCubit>().login(email: emailEdc.text, password: passEdc.text);
                   },
                   child: Text('Masuk'),
                   style: ElevatedButton.styleFrom(
@@ -93,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+),
       ),
     );
   }
