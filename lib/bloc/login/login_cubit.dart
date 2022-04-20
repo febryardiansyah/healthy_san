@@ -9,6 +9,7 @@ class LoginCubit extends Cubit<LoginState> {
   final _repo = AuthRepo();
 
   void login({required String email,required String password})async{
+    emit(LoginLoading());
     try{
       await _repo.login(email: email, password: password);
       emit(LoginSuccess('Login berhasil!'));

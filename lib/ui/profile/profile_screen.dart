@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthy_san/bloc/auth/auth_cubit.dart';
+import 'package:healthy_san/ui/login/login_screen.dart';
 import 'package:healthy_san/utils/base_color.dart';
+import 'package:healthy_san/utils/routes.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -7,6 +11,60 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthCubit>().checkLogin();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state is AuthUnAuthenticated) {
+            return Container(
+              margin: EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Kamu harus login terlebih dahulu'),
+                  SizedBox(height: 8,),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, rLogin);
+                    },
+                    child: Text('Login'),
+                    style: ElevatedButton.styleFrom(
+                      primary: BaseColor.base,
+                      fixedSize: Size(MediaQuery.of(context).size.width, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          if (state is AuthAuthenticated) {
+            return ProfileBody();
+          }
+          return Container();
+        },
+      ),
+    );
+  }
+}
+
+class ProfileBody extends StatefulWidget {
+  const ProfileBody({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileBody> createState() => _ProfileBodyState();
+}
+
+class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,11 +95,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 140,
                   width: 140,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: NetworkImage('https://asset.kompas.com/crops/ncgvDkq11ovx_624dxbv483x_iY=/0x0:648x432/750x500/data/photo/2021/10/05/615c371c61b81.jpg'),
-                      fit: BoxFit.cover,
-                    )
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: NetworkImage('https://asset.kompas.com/crops/ncgvDkq11ovx_624dxbv483x_iY=/0x0:648x432/750x500/data/photo/2021/10/05/615c371c61b81.jpg'),
+                        fit: BoxFit.cover,
+                      )
                   ),
                 ),
               ),
@@ -89,3 +147,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+

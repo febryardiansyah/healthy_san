@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:healthy_san/bloc/auth/auth_cubit.dart';
 import 'package:healthy_san/bloc/login/login_cubit.dart';
 import 'package:healthy_san/utils/base_color.dart';
 import 'package:healthy_san/utils/my_snackbar.dart';
@@ -29,7 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
               failureSnackBar(context, state.msg);
             }
             if (state is LoginSuccess) {
+              context.read<AuthCubit>().loggedIn();
               successSnackBar(context, state.msg);
+              Navigator.pushNamedAndRemoveUntil(context, rHome, (route) => false);
             }
           },
           child: Padding(
@@ -41,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    onPressed: (){},
+                    onPressed: ()=>Navigator.pop(context),
                     icon: Icon(Icons.close,color: BaseColor.grey),
                   ),
                 ),
