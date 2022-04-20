@@ -48,4 +48,14 @@ class AuthRepo {
     String? token = await getToken();
     return token != null;
   }
+
+  void deleteToken()async{
+    final pref = await SharedPreferences.getInstance();
+    await pref.remove(BaseString.keyToken);
+  }
+
+  Future<void> logOut()async{
+    await _auth.signOut();
+    deleteToken();
+  }
 }

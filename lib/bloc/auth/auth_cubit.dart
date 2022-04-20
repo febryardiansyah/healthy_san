@@ -18,5 +18,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void loggedIn()async=>emit(AuthAuthenticated());
-  void loggedOut()async=>emit(AuthUnAuthenticated());
+  void loggedOut() async {
+    await _repo.logOut();
+    emit(AuthUnAuthenticated());
+  }
 }
