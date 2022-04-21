@@ -126,6 +126,9 @@ class _ProfileBodyState extends State<ProfileBody> {
                     Text(user.email!),
                     SizedBox(height: 8,),
                     InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, rEditProfile,arguments: user);
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 4,horizontal: 8,

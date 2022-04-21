@@ -6,6 +6,7 @@ import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
 import 'package:healthy_san/bloc/login/login_cubit.dart';
 import 'package:healthy_san/bloc/register/register_cubit.dart';
 import 'package:healthy_san/bloc/auth/auth_cubit.dart';
+import 'package:healthy_san/bloc/save_image_profile/save_image_profile_cubit.dart';
 import 'package:healthy_san/ui/splash_screen.dart';
 import 'package:healthy_san/utils/routes.dart';
 import 'firebase_options.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => LoginCubit(),),
         BlocProvider(create: (context) => AuthCubit(),),
         BlocProvider(create: (context) => GetProfileCubit(),),
+        BlocProvider(create: (context) => SaveImageProfileCubit(),),
       ],
       child: MaterialApp(
         title: 'Healthy.San',
