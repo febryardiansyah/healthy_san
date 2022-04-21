@@ -9,6 +9,7 @@ import 'package:healthy_san/bloc/auth/auth_cubit.dart';
 import 'package:healthy_san/bloc/save_image_profile/save_image_profile_cubit.dart';
 import 'package:healthy_san/ui/splash_screen.dart';
 import 'package:healthy_san/utils/routes.dart';
+import 'bloc/update_profile/update_profile_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit(),),
         BlocProvider(create: (context) => GetProfileCubit(),),
         BlocProvider(create: (context) => SaveImageProfileCubit(),),
+        BlocProvider(create: (context) => UpdateProfileCubit(),),
       ],
       child: MaterialApp(
         title: 'Healthy.San',

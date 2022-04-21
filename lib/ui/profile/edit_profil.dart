@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
 import 'package:healthy_san/bloc/save_image_profile/save_image_profile_cubit.dart';
+import 'package:healthy_san/bloc/update_profile/update_profile_cubit.dart';
 import 'package:healthy_san/models/user_model.dart';
 import 'package:healthy_san/utils/base_color.dart';
 import 'package:healthy_san/utils/my_snackbar.dart';
@@ -26,6 +27,8 @@ class _EditProfileState extends State<EditProfile> {
   final nameEdc = TextEditingController();
   final oldPasswordEdc = TextEditingController();
   final newPasswordEdc = TextEditingController();
+  bool olPassInvisible = true;
+  bool newPassInvisible = true;
 
   final picker = ImagePicker();
   XFile? pickedImage;
@@ -53,161 +56,186 @@ class _EditProfileState extends State<EditProfile> {
         backgroundColor: BaseColor.base,
         title: Text('Edit profil'),
       ),
-      body: BlocListener<SaveImageProfileCubit, SaveImageProfileState>(
-        listener: (context, state) {
-          if (state is SaveImageProfileLoading) {
-            loadingSnackBar(context);
-          }
-          if (state is SaveImageProfileFailure) {
-            failureSnackBar(context, state.msg);
-          }
-          if (state is SaveImageProfileSuccess) {
-            successSnackBar(context, state.msg);
-            context.read<GetProfileCubit>().fetchProfile();
-            Navigator.pop(context);
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<SaveImageProfileCubit, SaveImageProfileState>(
+            listener: (context, state) {
+              if (state is SaveImageProfileLoading) {
+                loadingSnackBar(context);
+              }
+              if (state is SaveImageProfileFailure) {
+                failureSnackBar(context, state.msg);
+              }
+              if (state is SaveImageProfileSuccess) {
+                successSnackBar(context, state.msg);
+                context.read<GetProfileCubit>().fetchProfile();
+                Navigator.pop(context);
+              }
+            },
+          ),
+          BlocListener<UpdateProfileCubit, UpdateProfileState>(
+            listener: (context, state) {
+              if (state is UpdateProfileLoading) {
+                loadingSnackBar(context);
+              }
+              if (state is UpdateProfileFailure) {
+                failureSnackBar(context, state.msg);
+              }
+              if (state is UpdateProfileSuccess) {
+                successSnackBar(context, state.msg);
+                context.read<GetProfileCubit>().fetchProfile();
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
         child: Padding(
-        padding: EdgeInsets.all(12),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: pickedImage != null? DecorationImage(
-                          image: FileImage(File(pickedImage!.path),),
-                          fit: BoxFit.cover,
-                        ): DecorationImage(
-                          image: NetworkImage(user.profilePic!,),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 12,),
-                    Visibility(
-                      visible: pickedImage != null,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                pickedImage = null;
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-                              child: Text('Hapus foto',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8,),
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: pickedImage == null,
-                      child: Column(
-                        children: [
-                          InkWell(
-                            onTap: pickImage,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-                              child: Text('Ubah foto profil',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                                color: BaseColor.base.withOpacity(0.2),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8,),
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: pickedImage != null,
-                      child: InkWell(
-                        onTap: (){
-                          context.read<SaveImageProfileCubit>().saveImage(pickedImage!);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
-                          child: Text('Simpan foto',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            color: Colors.blue,
+          padding: EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: pickedImage != null? DecorationImage(
+                            image: FileImage(File(pickedImage!.path),),
+                            fit: BoxFit.cover,
+                          ): DecorationImage(
+                            image: NetworkImage(user.profilePic!,),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 12,),
-              Text('Nama'),
-              SizedBox(height: 8,),
-              MyForm(
-                hintText: 'nama kamu',
-                controller: nameEdc,
-              ),
-              Text('Kata Sandi Lama'),
-              SizedBox(height: 8,),
-              MyForm(
-                hintText: 'kata sandi lama',
-                controller: oldPasswordEdc,
-                // secureText: passwordInvisible,
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.remove_red_eye_outlined),
-                  onPressed: () {
-                    setState(() {
-                      // passwordInvisible = !passwordInvisible;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 8,),
-              Text('Kata Sandi Baru'),
-              SizedBox(height: 8,),
-              MyForm(
-                hintText: 'kata sandi baru',
-                controller: newPasswordEdc,
-                // secureText: passwordInvisible,
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.remove_red_eye_outlined),
-                  onPressed: () {
-                    setState(() {
-                      // passwordInvisible = !passwordInvisible;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 16,),
-              ElevatedButton(
-                onPressed: () {
-                },
-                child: Text('Simpan'),
-                style: ElevatedButton.styleFrom(
-                  primary: BaseColor.base,
-                  fixedSize: Size(MediaQuery.of(context).size.width, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                      SizedBox(height: 12,),
+                      Visibility(
+                        visible: pickedImage != null,
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  pickedImage = null;
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                                child: Text('Hapus foto',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8,),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: pickedImage == null,
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: pickImage,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                                child: Text('Ubah foto profil',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  color: BaseColor.base.withOpacity(0.2),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8,),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: pickedImage != null,
+                        child: InkWell(
+                          onTap: (){
+                            context.read<SaveImageProfileCubit>().saveImage(pickedImage!);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                            child: Text('Simpan foto',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold)),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(24),
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 12,),
+                Text('Nama'),
+                SizedBox(height: 8,),
+                MyForm(
+                  hintText: 'nama kamu',
+                  controller: nameEdc,
+                ),
+                SizedBox(height: 8,),
+                Text('Kata Sandi Lama'),
+                SizedBox(height: 8,),
+                MyForm(
+                  hintText: 'kata sandi lama',
+                  controller: oldPasswordEdc,
+                  secureText: olPassInvisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.remove_red_eye_outlined),
+                    onPressed: () {
+                      setState(() {
+                        olPassInvisible = !olPassInvisible;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: 8,),
+                Text('Kata Sandi Baru'),
+                SizedBox(height: 8,),
+                MyForm(
+                  hintText: 'kata sandi baru',
+                  controller: newPasswordEdc,
+                  secureText: newPassInvisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.remove_red_eye_outlined),
+                    onPressed: () {
+                      setState(() {
+                        newPassInvisible = !newPassInvisible;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(height: 16,),
+                ElevatedButton(
+                  onPressed: () {
+                    String? _oldPass = oldPasswordEdc.text.isEmpty?null:oldPasswordEdc.text;
+                    String? _newPass = newPasswordEdc.text.isEmpty?null:newPasswordEdc.text;
+                    context.read<UpdateProfileCubit>().updateProfile(
+                      name: nameEdc.text,oldPassword: _oldPass,newPassword: _newPass,
+                    );
+                  },
+                  child: Text('Simpan'),
+                  style: ElevatedButton.styleFrom(
+                    primary: BaseColor.base,
+                    fixedSize: Size(MediaQuery.of(context).size.width, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-),
     );
   }
 }
