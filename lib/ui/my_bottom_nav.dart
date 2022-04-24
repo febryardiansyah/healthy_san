@@ -19,10 +19,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        children: children,
-        index: currentIndex,
-      ),
+      body: children[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: BaseColor.base,
         onTap: (val){

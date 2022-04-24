@@ -2,8 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:healthy_san/bloc/get_all_forums/get_all_forums_cubit.dart';
+import 'package:healthy_san/bloc/get_my_post/get_my_post_cubit.dart';
 import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
 import 'package:healthy_san/bloc/login/login_cubit.dart';
+import 'package:healthy_san/bloc/post_question/post_question_cubit.dart';
 import 'package:healthy_san/bloc/register/register_cubit.dart';
 import 'package:healthy_san/bloc/auth/auth_cubit.dart';
 import 'package:healthy_san/bloc/save_image_profile/save_image_profile_cubit.dart';
@@ -32,6 +35,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => GetProfileCubit(),),
         BlocProvider(create: (context) => SaveImageProfileCubit(),),
         BlocProvider(create: (context) => UpdateProfileCubit(),),
+        BlocProvider(create: (context) => PostQuestionCubit(),),
+        BlocProvider(create: (context) => GetAllForumsCubit(),),
+        BlocProvider(create: (context) => GetMyPostCubit(),),
       ],
       child: MaterialApp(
         title: 'Healthy.San',

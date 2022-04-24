@@ -11,6 +11,8 @@ class MyForm extends StatelessWidget {
   final bool secureText;
   final TextStyle? hintStyle;
   final double borderRadius;
+  final TextCapitalization textCapitalization;
+  final TextStyle? textStyle;
 
   const MyForm({
     Key? key,
@@ -22,6 +24,8 @@ class MyForm extends StatelessWidget {
     this.secureText = false,
     this.hintStyle,
     this.borderRadius = 16,
+    this.textCapitalization = TextCapitalization.none,
+    this.textStyle,
   }) : super(key: key);
 
   @override
@@ -30,6 +34,8 @@ class MyForm extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: secureText,
+      textCapitalization: textCapitalization,
+      style: textStyle,
       decoration: InputDecoration(
         filled: true,
         suffixIcon: suffixIcon,
