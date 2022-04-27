@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthy_san/bloc/post_question/post_question_cubit.dart';
-import 'package:healthy_san/ui/forum/my_post_screen.dart';
+import 'package:healthy_san/ui/forum/widget/my_post_screen.dart';
 import 'package:healthy_san/ui/forum/widget/for_you_screen.dart';
 import 'package:healthy_san/utils/my_snackbar.dart';
 import 'package:healthy_san/widgets/my_form.dart';
@@ -64,6 +64,7 @@ class _ForumScreenState extends State<ForumScreen> {
                                   ),
                                   textCapitalization: TextCapitalization.sentences,
                                   hintText: 'Tulis pertanyaan..',
+                                  textInputAction: TextInputAction.done,
                                   borderRadius: 8,
                                   controller: textEDC,
                                   hintStyle: TextStyle(

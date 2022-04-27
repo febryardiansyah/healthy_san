@@ -13,6 +13,11 @@ class MyForm extends StatelessWidget {
   final double borderRadius;
   final TextCapitalization textCapitalization;
   final TextStyle? textStyle;
+  final int? minLines;
+  final int? maxLines;
+  final TextInputAction? textInputAction;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool? isDense;
 
   const MyForm({
     Key? key,
@@ -26,6 +31,11 @@ class MyForm extends StatelessWidget {
     this.borderRadius = 16,
     this.textCapitalization = TextCapitalization.none,
     this.textStyle,
+    this.minLines,
+    this.maxLines,
+    this.textInputAction,
+    this.contentPadding,
+    this.isDense,
   }) : super(key: key);
 
   @override
@@ -35,8 +45,13 @@ class MyForm extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: secureText,
       textCapitalization: textCapitalization,
+      textInputAction: textInputAction,
       style: textStyle,
+      minLines: minLines,
+      maxLines: maxLines,
       decoration: InputDecoration(
+        isDense: isDense,
+        contentPadding: contentPadding,
         filled: true,
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,

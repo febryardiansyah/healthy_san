@@ -11,16 +11,16 @@ class ForumModel{
   final String? id;
   final String? postedBy;
   final String? question;
-  final List<String>? answerIds;
+  final int? totalAnswer;
   final DateTime? createdAt;
 
-  ForumModel({this.id, this.postedBy, this.question, this.answerIds, this.createdAt,});
+  ForumModel({this.id, this.postedBy, this.question, this.totalAnswer, this.createdAt,});
 
   factory ForumModel.fromMap(Map<String,dynamic>json)=>ForumModel(
     id: json['id'],
     postedBy: json['postedBy'],
     question: json['question'],
-    answerIds: List<String>.from(json['answerIds'].map((x)=>x)),
+    totalAnswer: json['totalAnswer'],
     createdAt: DateTime.parse(json['createdAt']),
   );
 
@@ -28,15 +28,39 @@ class ForumModel{
     'id':id,
     'postedBy':postedBy,
     'question':question,
-    'answerIds':answerIds,
+    'totalAnswer':totalAnswer,
     'createdAt':createdAt?.toIso8601String(),
   };
 }
 
+class AnswerDataModel{
+  final UserModel user;
+  final AnswerModel answer;
+
+  AnswerDataModel(this.user, this.answer);
+}
+
 class AnswerModel{
   final String? id;
-  final String? commentBy;
+  final String? commentedBy;
   final String? answer;
+  final DateTime? createdAt;
 
-  AnswerModel({this.id, this.commentBy, this.answer});
+  AnswerModel({this.id, this.commentedBy, this.answer,this.createdAt});
+
+  factory AnswerModel.fromMap(Map<String,dynamic>json){
+    return AnswerModel(
+      id: json['id'],
+      commentedBy: json['commentedBy'],
+      answer: json['answer'],
+      createdAt: DateTime.parse(json['createdAt'])
+    );
+  }
+
+  Map<String,dynamic> toMap()=>{
+    'id':id,
+    'commentedBy':commentedBy,
+    'answer':answer,
+    'createdAt':createdAt?.toIso8601String(),
+  };
 }

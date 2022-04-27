@@ -5,7 +5,8 @@ import 'package:healthy_san/bloc/delete_post/delete_post_cubit.dart';
 import 'package:healthy_san/bloc/get_my_post/get_my_post_cubit.dart';
 import 'package:healthy_san/utils/my_snackbar.dart';
 
-import '../../bloc/get_all_forums/get_all_forums_cubit.dart';
+import '../../../bloc/get_all_forums/get_all_forums_cubit.dart';
+import '../../../utils/routes.dart';
 
 class MyPostScreen extends StatefulWidget {
   @override
@@ -52,8 +53,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   final item = state.data[i];
                   return Card(
                     child: ListTile(
+                      onTap: (){
+                        Navigator.pushNamed(context, rDetailForum,arguments: item.post?.id);
+                      },
                       title: Text(item.post!.question!),
-                      subtitle: Text('${item.post?.answerIds?.length} Jawaban'),
+                      subtitle: Text('${item.post?.totalAnswer} Jawaban'),
                       trailing: IconButton(
                         icon: Icon(Icons.remove_circle_outline, color: Colors.red),
                         onPressed: () {

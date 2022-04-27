@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_san/models/user_model.dart';
+import 'package:healthy_san/ui/forum/detail_forum_screen.dart';
 import 'package:healthy_san/ui/login/login_screen.dart';
 import 'package:healthy_san/ui/register/register_screen.dart';
 
@@ -24,6 +25,9 @@ Route? generateRoute(RouteSettings settings){
     case rEditProfile:
       _route = _pageRoute(body: EditProfile(user: _args as UserModel), settings: settings);
       break;
+    case rDetailForum:
+      _route = _pageRoute(body: DetailForumScreen(id: _args as String), settings: settings);
+      break;
   }
   return _route;
 }
@@ -35,3 +39,4 @@ const String rRegister = '/register';
 const String rSplash = '/splash';
 const String rHome = '/home';
 const String rEditProfile = '/editProfile';
+const String rDetailForum = '/detailForum';
