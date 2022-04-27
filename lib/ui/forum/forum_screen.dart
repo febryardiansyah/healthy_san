@@ -7,6 +7,7 @@ import 'package:healthy_san/utils/my_snackbar.dart';
 import 'package:healthy_san/widgets/my_form.dart';
 
 import '../../bloc/get_all_forums/get_all_forums_cubit.dart';
+import '../../bloc/get_my_post/get_my_post_cubit.dart';
 import '../../utils/base_color.dart';
 
 class ForumScreen extends StatefulWidget {
@@ -34,6 +35,7 @@ class _ForumScreenState extends State<ForumScreen> {
               if (state is PostQuestionSuccess) {
                 successSnackBar(context, state.msg);
                 context.read<GetAllForumsCubit>().fetchAllForum();
+                context.read<GetMyPostCubit>().fetchMyPost();
                 textEDC.clear();
               }
             },

@@ -18,7 +18,7 @@ class ForumRepo {
         postedBy: user.uid,
         createdAt: DateTime.now(),
       );
-      await _fireStore.collection('forums').doc().set(forumData.toMap());
+      await _fireStore.collection('forums').doc(id).set(forumData.toMap());
     }on FirebaseException catch(e){
       throw e.message ?? 'Something wrong!';
     }
@@ -49,6 +49,14 @@ class ForumRepo {
         ));
       }
       return posts;
+    }on FirebaseException catch(e){
+      throw e.message ?? 'Something wrong!';
+    }
+  }
+
+  Future<void> deletePost(String id)async{
+    try{
+      await _fireStore.collection('forums').doc(id).delete();
     }on FirebaseException catch(e){
       throw e.message ?? 'Something wrong!';
     }
