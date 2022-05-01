@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthy_san/bloc/auth/auth_cubit.dart';
+import 'package:healthy_san/bloc/get_new_article/get_new_article_cubit.dart';
+import 'package:healthy_san/bloc/get_popular_article/get_popular_article_cubit.dart';
 import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
 import 'package:healthy_san/ui/home/widget/home_newest.dart';
 import 'package:healthy_san/ui/home/widget/home_popular.dart';
@@ -18,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<AuthCubit>().checkLogin();
+    context.read<GetPopularArticleCubit>().fetchArticles();
+    context.read<GetNewArticleCubit>().fetchArticles();
   }
   
   @override

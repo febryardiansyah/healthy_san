@@ -8,8 +8,11 @@ class ArticleModel{
   ArticleModel({this.title, this.imageUrl, this.desc,this.isPopular,this.id});
 
   factory ArticleModel.fromMap(Map<String,dynamic>json)=>ArticleModel(
-    id: json['id'],title: json['title'],
-    imageUrl: json['imageUrl'],desc: json['desc'],isPopular: json['isPopular'],
+    id: json['id'],
+    title: json['title'],
+    imageUrl: json['imageUrl'],
+    desc: json['desc'],
+    isPopular: json['isPopular'],
   );
 
   Map<String,dynamic> toMap()=>{
