@@ -2,9 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:healthy_san/bloc/auth/auth_cubit.dart';
+import 'package:healthy_san/bloc/get_favorites/get_favorites_cubit.dart';
 import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
 import 'package:healthy_san/utils/base_color.dart';
+import 'package:healthy_san/utils/helpers.dart';
+import 'package:healthy_san/utils/my_snackbar.dart';
 import 'package:healthy_san/utils/routes.dart';
+
+import '../../bloc/add_to_favorite/add_to_favorite_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -93,81 +98,129 @@ class _ProfileBodyState extends State<ProfileBody> {
           )
         ],
       ),
-      body: BlocBuilder<GetProfileCubit, GetProfileState>(
-        builder: (context, state) {
-          if (state is GetProfileLoading) {
-            return Center(child: CupertinoActivityIndicator(),);
+      body: BlocListener<AddToFavoriteCubit, AddToFavoriteState>(
+        listener: (context, state) {
+          if (state is AddToFavoriteLoading) {
+            loadingSnackBar(context);
           }
-          if (state is GetProfileFailure) {
-            return Center(child: Text(state.msg),);
+          if (state is AddToFavoriteFailure) {
+            failureSnackBar(context, state.msg);
           }
-          if (state is GetProfileSuccess) {
-            final user = state.user;
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Center(
-                      child: Container(
-                        height: 140,
-                        width: 140,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: NetworkImage(user.profilePic!),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8,),
-                    Text(user.name!,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
-                    Text(user.email!),
-                    SizedBox(height: 8,),
-                    InkWell(
-                      onTap: (){
-                        Navigator.pushNamed(context, rEditProfile,arguments: user);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 4,horizontal: 8,
-                        ),
-                        child: Text('Edit Profil',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold,)),
-                        decoration: BoxDecoration(
-                          color: BaseColor.lightGreen,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 24,),
-                    Align(
-                      child: Text('Artikel favorit',style: TextStyle(fontWeight: FontWeight.bold)),
-                      alignment: Alignment.topLeft,
-                    ),
-                    ListView.separated(
-                      separatorBuilder: (context,i)=>Divider(),
-                      itemCount: 4,
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context,i){
-                        return ListTile(
-                          leading: Image.network('https://asset.kompas.com/crops/1y4AYAV9kzrAARMP-IpF_CdWKE4=/0x0:0x0/750x500/data/photo/2020/10/24/5f93dccf663f5.jpg',fit: BoxFit.cover),
-                          title: Text('Manfaat Daun Pepaya Ampuh Benget, Penyakit Kronis Rontok'),
-                          trailing: IconButton(
-                            icon: Icon(Icons.favorite,color: Colors.red),
-                            onPressed: (){},
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
-            );
+          if (state is AddToFavoriteSuccess) {
+            successSnackBar(context, state.msg);
+            context.read<GetProfileCubit>().fetchProfile();
           }
-          return Container();
         },
+        child: BlocConsumer<GetProfileCubit, GetProfileState>(
+          listener: (context, state) {
+            if (state is GetProfileSuccess) {
+              context.read<GetFavoritesCubit>().fetchFavorites(state.user.uid!);
+            }
+          },
+          builder: (context, state) {
+            if (state is GetProfileLoading) {
+              return Center(child: CupertinoActivityIndicator(),);
+            }
+            if (state is GetProfileFailure) {
+              return Center(child: Text(state.msg),);
+            }
+            if (state is GetProfileSuccess) {
+              final user = state.user;
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          height: 140,
+                          width: 140,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: NetworkImage(user.profilePic!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8,),
+                      Text(user.name!,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
+                      Text(user.email!),
+                      SizedBox(height: 8,),
+                      InkWell(
+                        onTap: (){
+                          Navigator.pushNamed(context, rEditProfile,arguments: user);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4,horizontal: 8,
+                          ),
+                          child: Text('Edit Profil',style: TextStyle(color: BaseColor.base,fontWeight: FontWeight.bold,)),
+                          decoration: BoxDecoration(
+                            color: BaseColor.lightGreen,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 24,),
+                      Align(
+                        child: Text('Artikel favorit',style: TextStyle(fontWeight: FontWeight.bold)),
+                        alignment: Alignment.topLeft,
+                      ),
+                      BlocBuilder<GetFavoritesCubit, GetFavoritesState>(
+                        builder: (context, state) {
+                          if (state is GetFavoritesLoading) {
+                            return Center(child: CupertinoActivityIndicator(),);
+                          }
+                          if (state is GetFavoritesFailure) {
+                            return Center(child: Text(state.msg),);
+                          }
+                          if (state is GetFavoritesSuccess) {
+                            final data = state.data;
+                            return ListView.separated(
+                              separatorBuilder: (context,i)=>Divider(),
+                              itemCount: data.length,
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context,i){
+                                final item = data[i];
+                                return ListTile(
+                                  onTap: (){
+                                    Navigator.pushNamed(context, rDetailArticle,arguments: item.id);
+                                  },
+                                  leading: item.imageUrl!.startsWith('data:image/')?Image.memory(
+                                    Helpers.convertBase64Image(item.imageUrl!),
+                                    width: 60,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ):Image.network(item.imageUrl!,
+                                    width: 60,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  title: Text(item.title!),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete,color: Colors.red),
+                                    onPressed: (){
+                                      context.read<AddToFavoriteCubit>().addToFav(item,true);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          return Container();
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }
