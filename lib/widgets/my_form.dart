@@ -18,6 +18,7 @@ class MyForm extends StatelessWidget {
   final TextInputAction? textInputAction;
   final EdgeInsetsGeometry? contentPadding;
   final bool? isDense;
+  final ValueChanged<String>? onFieldSubmitted;
 
   const MyForm({
     Key? key,
@@ -36,6 +37,7 @@ class MyForm extends StatelessWidget {
     this.textInputAction,
     this.contentPadding,
     this.isDense,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class MyForm extends StatelessWidget {
       style: textStyle,
       minLines: minLines,
       maxLines: maxLines,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         isDense: isDense,
         contentPadding: contentPadding,

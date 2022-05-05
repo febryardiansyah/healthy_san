@@ -4,9 +4,11 @@ import 'package:healthy_san/bloc/auth/auth_cubit.dart';
 import 'package:healthy_san/bloc/get_new_article/get_new_article_cubit.dart';
 import 'package:healthy_san/bloc/get_popular_article/get_popular_article_cubit.dart';
 import 'package:healthy_san/bloc/get_profile/get_profile_cubit.dart';
+import 'package:healthy_san/ui/article_list/article_list_screen.dart';
 import 'package:healthy_san/ui/home/widget/home_newest.dart';
 import 'package:healthy_san/ui/home/widget/home_popular.dart';
 import 'package:healthy_san/utils/base_color.dart';
+import 'package:healthy_san/utils/routes.dart';
 import 'package:healthy_san/widgets/my_form.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -73,6 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 MyForm(
                   hintText: 'Cari artikel disini',
                   prefixIcon: Icon(Icons.search),
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (val){
+                    if (val.isNotEmpty) {
+                      Navigator.pushNamed(context, rArticleList,arguments: ArticleListParams(listType: ListType.search,keywords: val));
+                    }
+                  },
                 ),
                 SizedBox(height: 12,),
                 HomePopular(),

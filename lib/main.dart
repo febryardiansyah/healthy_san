@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:healthy_san/bloc/delete_post/delete_post_cubit.dart';
 import 'package:healthy_san/bloc/get_all_forums/get_all_forums_cubit.dart';
 import 'package:healthy_san/bloc/get_answers/get_answers_cubit.dart';
+import 'package:healthy_san/bloc/get_article_list/get_article_list_cubit.dart';
 import 'package:healthy_san/bloc/get_detail_article/get_detail_article_cubit.dart';
 import 'package:healthy_san/bloc/get_detail_post/get_detail_post_cubit.dart';
 import 'package:healthy_san/bloc/get_my_post/get_my_post_cubit.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => GetPopularArticleCubit(),),
         BlocProvider(create: (context) => GetNewArticleCubit(),),
         BlocProvider(create: (context) => GetDetailArticleCubit(),),
+        BlocProvider(create: (context) => GetArticleListCubit(),),
       ],
       child: MaterialApp(
         title: 'Healthy.San',

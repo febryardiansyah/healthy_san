@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:healthy_san/bloc/get_new_article/get_new_article_cubit.dart';
+import 'package:healthy_san/utils/helpers.dart';
 import 'package:healthy_san/utils/styles.dart';
 
 import '../../../utils/base_color.dart';
 import '../../../utils/routes.dart';
+import '../../article_list/article_list_screen.dart';
 
 class HomeNewest extends StatelessWidget {
   @override
@@ -29,7 +31,9 @@ class HomeNewest extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, rArticleList,arguments: ArticleListParams(listType: ListType.newest,keywords: null));
+                    },
                     child: Row(
                       children: [
                         Text(
@@ -76,17 +80,18 @@ class HomeNewest extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IntrinsicHeight(
-                              child: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(item.imageUrl!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8)
-                                ),
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  image: item.imageUrl!.startsWith('data:image/')?DecorationImage(
+                                    image: MemoryImage(Helpers.convertBase64Image(item.imageUrl!)),
+                                    fit: BoxFit.cover,
+                                  ): DecorationImage(
+                                    image: NetworkImage(item.imageUrl!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)
                               ),
                             ),
                             SizedBox(width: 4,),
@@ -95,7 +100,7 @@ class HomeNewest extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(item.title!,style: TextStyle(fontWeight: FontWeight.bold,)),
-                                  Html(data: item.desc!.length > 20?item.desc!.substring(0,20):item.desc!),
+                                  Html(data: item.desc!.length > 30?'${item.desc!.substring(0,30)}..':item.desc!),
                                 ],
                               ),
                             )

@@ -6,6 +6,9 @@ import 'package:healthy_san/utils/base_color.dart';
 import 'package:healthy_san/utils/routes.dart';
 import 'package:healthy_san/utils/styles.dart';
 
+import '../../../utils/helpers.dart';
+import '../../article_list/article_list_screen.dart';
+
 class HomePopular extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,9 @@ class HomePopular extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, rArticleList,arguments: ArticleListParams(listType: ListType.popular,keywords: null));
+                    },
                     child: Row(
                       children: [
                         Text(
@@ -87,7 +92,10 @@ class HomePopular extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(8)),
-                                    image: DecorationImage(
+                                    image: item.imageUrl!.startsWith('data:image/')?DecorationImage(
+                                      image: MemoryImage(Helpers.convertBase64Image(item.imageUrl!)),
+                                      fit: BoxFit.cover,
+                                    ): DecorationImage(
                                       image: NetworkImage(item.imageUrl!),
                                       fit: BoxFit.cover,
                                     ),

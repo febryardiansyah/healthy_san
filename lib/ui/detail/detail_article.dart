@@ -6,6 +6,7 @@ import 'package:healthy_san/bloc/get_detail_article/get_detail_article_cubit.dar
 import 'package:healthy_san/widgets/my_back_button.dart';
 
 import '../../utils/base_color.dart';
+import '../../utils/helpers.dart';
 
 class DetailArticleScreen extends StatefulWidget {
   final String id;
@@ -40,7 +41,12 @@ class _DetailArticleScreenState extends State<DetailArticleScreen> {
               final data = state.data;
               return Stack(
                 children: [
-                  Image.network(data.imageUrl!,
+                  data.imageUrl!.startsWith('data:image/')?Image.memory(
+                    Helpers.convertBase64Image(data.imageUrl!,),
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ):Image.network(data.imageUrl!,
                     height: MediaQuery.of(context).size.height * 0.4,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
