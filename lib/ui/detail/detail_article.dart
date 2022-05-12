@@ -82,29 +82,33 @@ class _DetailArticleScreenState extends State<DetailArticleScreen> {
                       child: Row(
                         children: [
                           MyBackButton(),
-                          Spacer(),
                           BlocBuilder<CheckIsFavoriteCubit, CheckIsFavoriteState>(
                             builder: (context, state) {
                               if (state is CheckIsFavoriteSuccess) {
                                 final value = state.value;
-                                return InkWell(
-                                  onTap: (){
-                                    context.read<AddToFavoriteCubit>().addToFav(data,value);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(4),
-                                    child: value?Icon(
-                                      Icons.favorite,
-                                      color: Colors.red,
-                                    ): Icon(Icons.favorite_border,color: BaseColor.white),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: BaseColor.black.withOpacity(0.2),
+                                return Row(
+                                  children: [
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: (){
+                                        context.read<AddToFavoriteCubit>().addToFav(data,value);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(4),
+                                        child: value?Icon(
+                                          Icons.favorite,
+                                          color: Colors.red,
+                                        ): Icon(Icons.favorite_border,color: BaseColor.white),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: BaseColor.black.withOpacity(0.2),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 );
                               }
-                              return Container();
+                              return Text('');
                             },
                           )
                         ],

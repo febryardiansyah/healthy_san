@@ -39,7 +39,7 @@ class MyForm extends StatelessWidget {
     this.isDense,
     this.onFieldSubmitted,
   }) : super(key: key);
-
+ 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -49,8 +49,8 @@ class MyForm extends StatelessWidget {
       textCapitalization: textCapitalization,
       textInputAction: textInputAction,
       style: textStyle,
-      minLines: minLines,
-      maxLines: maxLines,
+      // minLines: minLines,
+      // maxLines: maxLines,
       onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         isDense: isDense,

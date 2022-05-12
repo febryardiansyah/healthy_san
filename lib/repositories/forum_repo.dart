@@ -27,9 +27,9 @@ class ForumRepo {
 
   Future<List<ForumDataModel>> getAllForum({bool isMyPost = false})async{
     try{
-      final user = await _userRepo.getProfile();
       var res;
       if (isMyPost) {
+        final user = await _userRepo.getProfile();
         res = await _fireStore.collection('forums')
             .orderBy('createdAt',descending: true)
             .where('postedBy',isEqualTo: user.uid)
