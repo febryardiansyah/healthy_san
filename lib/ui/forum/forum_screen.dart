@@ -30,9 +30,6 @@ class _ForumScreenState extends State<ForumScreen> {
               if (state is AuthUnAuthenticated) {
                 failureSnackBar(context, 'Kamu harus login terlebih dahulu');
               }
-              if (state is AuthAuthenticated) {
-                context.read<PostQuestionCubit>().postQuestion(question: textEDC.text,);
-              }
             },
             child: BlocListener<PostQuestionCubit, PostQuestionState>(
               listener: (context, state) {
@@ -91,7 +88,7 @@ class _ForumScreenState extends State<ForumScreen> {
                                   child: InkWell(
                                     onTap: () {
                                       if (textEDC.text.isNotEmpty) {
-                                        context.read<AuthCubit>().checkLogin();
+                                         context.read<PostQuestionCubit>().postQuestion(question: textEDC.text,);
                                       }
                                     },
                                     child: Container(

@@ -82,13 +82,13 @@ class _DetailArticleScreenState extends State<DetailArticleScreen> {
                       child: Row(
                         children: [
                           MyBackButton(),
+                          Spacer(),
                           BlocBuilder<CheckIsFavoriteCubit, CheckIsFavoriteState>(
                             builder: (context, state) {
                               if (state is CheckIsFavoriteSuccess) {
                                 final value = state.value;
                                 return Row(
                                   children: [
-                                    Spacer(),
                                     InkWell(
                                       onTap: (){
                                         context.read<AddToFavoriteCubit>().addToFav(data,value);
